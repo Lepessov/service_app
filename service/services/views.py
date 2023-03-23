@@ -13,8 +13,7 @@ class SubscriptionView(ReadOnlyModelViewSet):
     queryset = Subscription.objects.all()\
         .prefetch_related(Prefetch('client', queryset=Client.objects.all().select_related('user')
                                    .only('company_name', 'user__email')),
-                          Prefetch('plan'))\
-        .annotate(price=F('service__full_price') - F('service__full_price') * (F('plan__discount_percent') / 100.0))
+                          Prefetch('plan'))
     serializer_class = SubscriptionSerializer
 
     def list(self, request, *args, **kwargs):
